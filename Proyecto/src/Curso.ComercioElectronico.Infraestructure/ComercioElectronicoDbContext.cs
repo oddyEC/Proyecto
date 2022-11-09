@@ -16,7 +16,7 @@ public class ComercioElectronicoDbContext : DbContext, IUnitOfWork
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
-        DbPath = Path.Join(path, "curso.comercio-electronico.db");
+        DbPath = Path.Join(path, "curso.comercio-electronico.v2.db");
 
     }
 

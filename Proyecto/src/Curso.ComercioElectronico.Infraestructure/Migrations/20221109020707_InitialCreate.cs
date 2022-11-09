@@ -5,10 +5,36 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Curso.ComercioElectronico.Infraestructure.Migrations
 {
-    public partial class AddProduct : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Marcas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nombre = table.Column<string>(type: "TEXT", maxLength: 80, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Marcas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TipoProductos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nombre = table.Column<string>(type: "TEXT", maxLength: 80, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoProductos", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Productos",
                 columns: table => new
@@ -54,6 +80,12 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Productos");
+
+            migrationBuilder.DropTable(
+                name: "Marcas");
+
+            migrationBuilder.DropTable(
+                name: "TipoProductos");
         }
     }
 }
