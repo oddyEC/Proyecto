@@ -4,12 +4,12 @@ using Curso.ComercioElectronico.Domain;
 using System.Linq.Expressions;
 
 namespace Curso.ComercioElectronico.Infraestructure;
- 
 
-public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity : class 
+
+public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity : class
 {
     protected readonly ComercioElectronicoDbContext _context;
-
+    public IUnitOfWork UnitOfWork => _context;
     public EfRepository(ComercioElectronicoDbContext context)
     {
         _context = context;
@@ -20,7 +20,7 @@ public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity
         return await _context.Set<TEntity>().FindAsync(id);
     }
 
-   
+
     public virtual IQueryable<TEntity> GetAll(bool asNoTracking = true)
     {
         if (asNoTracking)
@@ -38,21 +38,21 @@ public abstract class EfRepository<TEntity> : IRepository<TEntity> where TEntity
         return entity;
     }
 
-    public virtual async  Task UpdateAsync(TEntity entity)
+    public virtual async Task UpdateAsync(TEntity entity)
     {
-          _context.Update(entity);
+        _context.Update(entity);
         await _context.SaveChangesAsync();
-        
+
         return;
     }
 
-    public virtual void  Delete(TEntity entity)
+    public virtual void Delete(TEntity entity)
     {
         _context.Set<TEntity>().Remove(entity);
         _context.SaveChanges();
- 
+
     }
- 
+
     public virtual IQueryable<TEntity> GetAllIncluding(params Expression<Func<TEntity, object>>[] includeProperties)
     {
         IQueryable<TEntity> queryable = GetAll();
