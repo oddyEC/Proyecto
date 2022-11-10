@@ -7,12 +7,13 @@ namespace Curso.ComercioElectronico.Application
 {
     public class OrdenAppService: IOrdenAppService
     {
-        private readonly IOrdenRepository ordenRepository;
+    private readonly IOrdenRepository ordenRepository;
     private readonly IProductoAppService productoAppService;
     private readonly ILogger<OrdenAppService> logger;
 
     public OrdenAppService(
         IOrdenRepository ordenRepository,
+        
         //IProductoRepository productoRepository,
         IProductoAppService productoAppService,
         ILogger<OrdenAppService> logger )
@@ -114,9 +115,17 @@ namespace Curso.ComercioElectronico.Application
         return Task.FromResult(consultaOrdenDto.SingleOrDefault());
     }
 
-    public Task UpdateAsync(Guid id, OrdenActualizarDto marca)
+    public async Task UpdateAsync(Guid id, OrdenActualizarDto ordenDto)
     {
-        throw new NotImplementedException();
+        var orden = await ordenRepository.GetByIdAsync(id);
+        if(orden == null){
+            throw new ArgumentException($"La orden con el id: {id}, no existe");
+        }
+        orden.Observaciones = ordenDto.Observaciones;
+        orden.Estado = ordenDto.Estado;
+        await ordenRepository.UpdateAsync(orden);
+
+        return;
     }
     }
 }

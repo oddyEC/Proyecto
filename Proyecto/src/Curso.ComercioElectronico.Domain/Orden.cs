@@ -28,10 +28,10 @@ namespace Curso.ComercioElectronico.Domain
         [Required]
         public decimal Total { get; set; }
 
-        public string? Observaciones { get; set; }
-
         [Required]
         public OrdenEstado Estado { get; set; }
+
+        public string? Observaciones { get; set; }
 
         public void AgregarItem(OrdenItem item)
         {
