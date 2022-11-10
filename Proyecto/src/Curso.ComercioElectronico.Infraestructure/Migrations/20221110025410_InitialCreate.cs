@@ -52,8 +52,7 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
                 name: "Ordenes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
                     FechaAnulacion = table.Column<DateTime>(type: "TEXT", nullable: true),
@@ -106,10 +105,9 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
                 name: "OrdenItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false),
-                    OrdenId = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrdenId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Cantidad = table.Column<long>(type: "INTEGER", nullable: false),
                     Precio = table.Column<double>(type: "REAL", nullable: false),
                     Observaciones = table.Column<string>(type: "TEXT", nullable: true)

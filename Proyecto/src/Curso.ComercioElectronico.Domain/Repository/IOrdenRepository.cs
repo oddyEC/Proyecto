@@ -1,6 +1,6 @@
 namespace Curso.ComercioElectronico.Domain.Repository
 {
-    public interface IOrdenRepository
+    public interface IOrdenRepository :  IRepository<Orden>
     {
         
     }

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Reflection;
 using Curso.ComercioElectronico.Application;
 using Curso.ComercioElectronico.Domain;
 using Curso.ComercioElectronico.Infraestructure;
@@ -27,14 +28,10 @@ builder.Services.AddDbContext<ComercioElectronicoDbContext>(options =>
     options.UseSqlite($"Data Source={dbPath}");
 });
 //builder.Services.AddScoped<IUnitOfWork, ComercioElectronicoDbContext>();
+builder.Services.AddInfraestructure(builder.Configuration);
 
-builder.Services.AddTransient<IMarcaRepository, MarcaRepository>();
-builder.Services.AddTransient<ITipoProductoRepository, TipoProductoRepository>();
-builder.Services.AddTransient<IProductoRepository, ProductoRepository>();
+builder.Services.AddApplication(builder.Configuration);
 
-builder.Services.AddTransient<IMarcaAppService, MarcaAppService>();
-builder.Services.AddTransient<ITipoProductoService, TipoProductoAppService>();
-builder.Services.AddTransient<IProductoAppService, ProductoAppService>();
 
 //Utilizar una factoria
 builder.Services.AddScoped<IUnitOfWork>(provider =>

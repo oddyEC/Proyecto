@@ -51,9 +51,9 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
 
             modelBuilder.Entity("Curso.ComercioElectronico.Domain.Orden", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ClienteId")
                         .HasColumnType("INTEGER");
@@ -82,9 +82,9 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
 
             modelBuilder.Entity("Curso.ComercioElectronico.Domain.OrdenItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Cantidad")
                         .HasColumnType("INTEGER");
@@ -92,8 +92,8 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
                     b.Property<string>("Observaciones")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("OrdenId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("OrdenId")
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("Precio")
                         .HasColumnType("REAL");
