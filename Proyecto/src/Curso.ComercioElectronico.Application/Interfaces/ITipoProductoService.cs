@@ -2,12 +2,14 @@ namespace Curso.ComercioElectronico.Application
 {
     public interface ITipoProductoService
     {
-        ICollection<TipoProductoDto> GetAll();
+        Task<TipoProductoDto> GetByIdAsync(int id);
 
-        Task<TipoProductoDto> CreateAsync(TipoProductoCrearActualizarDto tproducto);
+        ListaPaginada<TipoProductoDto> GetAll(int limit = 10, int offset = 0);
 
-        Task UpdateAsync(int id, TipoProductoCrearActualizarDto tproducto);
+        Task<TipoProductoDto> CreateAsync(TipoProductoCrearActualizarDto marca);
 
-        Task<bool> DeleteAsync(int tproductoId);
+        Task UpdateAsync(int id, TipoProductoCrearActualizarDto marca);
+
+        Task<bool> DeleteAsync(int marcaId);
     }
 }

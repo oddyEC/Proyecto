@@ -23,6 +23,7 @@ public class ClienteAppService : IClienteAppService
 
         //Mapeo Dto => Entidad
         var cliente = new Cliente();
+        cliente.Id = Guid.NewGuid();
         cliente.Nombres = clienteDto.Nombres;
 
         //Persistencia objeto
@@ -37,7 +38,7 @@ public class ClienteAppService : IClienteAppService
         return clienteCreado;
     }
 
-    public Task<bool> DeleteAsync(int clienteId)
+    public Task<bool> DeleteAsync(Guid clienteId)
     {
         throw new NotImplementedException();
     }
@@ -47,7 +48,7 @@ public class ClienteAppService : IClienteAppService
         throw new NotImplementedException();
     }
 
-    public Task UpdateAsync(int id, ClienteCrearActualizarDto clienteDto)
+    public Task UpdateAsync(Guid id, ClienteCrearActualizarDto clienteDto)
     {
         throw new NotImplementedException();
     }

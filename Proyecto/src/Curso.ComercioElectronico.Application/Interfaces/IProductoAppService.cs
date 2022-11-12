@@ -1,18 +1,24 @@
-namespace Curso.ComercioElectronico.Application
+namespace Curso.ComercioElectronico.Application.Dtos;
+
+public interface IProductoAppService
 {
-    public interface IProductoAppService
-    {
-        Task<ProductoDto> GetByIdAsync(int id);
+    Task<ProductoDto> GetByIdAsync(int id);
 
-        ListaPaginada<ProductoDto> GetAll(int limit = 10, int offset = 0);
+    //Permitir filtrar marca,tipo producto, y por texto (nombre,codigo). Paginacion.
+    ListaPaginada<ProductoDto> GetAll(int limit = 10, int offset = 0);
 
-        Task<ProductoDto> CreateAsync(ProductoCrearActualizarDto productoDto);
+    /*     ListaPaginada<ProductoDto> GetList(int limit=10,int offset=0,string? tipoProductoId="",
+                            string? marcaId="",string? valorBuscar=""); */
 
-        Task UpdateAsync(int id, ProductoCrearActualizarDto productoDto);
+    Task<ListaPaginada<ProductoDto>> GetListAsync(ProductoListInput input);
 
-        Task<bool> DeleteAsync(int productoId);
 
-        Task<ProductoDto> GetByName(string nombre);
-    }
+    Task<ProductoDto> CreateAsync(ProductoCrearActualizarDto marca);
 
+    Task UpdateAsync(int id, ProductoCrearActualizarDto marca);
+
+    Task<bool> DeleteAsync(int marcaId);
+
+    Task<ProductoDto> GetByName(string nombre);
 }
+

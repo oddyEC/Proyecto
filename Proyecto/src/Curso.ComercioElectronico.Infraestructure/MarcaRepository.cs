@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Curso.ComercioElectronico.Infraestructure;
 
-public class MarcaRepository : EfRepository<Marca>, IMarcaRepository
+public class MarcaRepository : EfRepository<Marca,int>, IMarcaRepository
 {
     public MarcaRepository(ComercioElectronicoDbContext context) : base(context)
     {

@@ -8,8 +8,8 @@ namespace Curso.ComercioElectronico.Application
 
         Task<ClienteDto> CreateAsync(ClienteCrearActualizarDto clienteDto);
 
-        Task UpdateAsync(int id, ClienteCrearActualizarDto clienteDto);
+        Task UpdateAsync(Guid id, ClienteCrearActualizarDto clienteDto);
 
-        Task<bool> DeleteAsync(int clienteId);
+        Task<bool> DeleteAsync(Guid clienteId);
     }
 }

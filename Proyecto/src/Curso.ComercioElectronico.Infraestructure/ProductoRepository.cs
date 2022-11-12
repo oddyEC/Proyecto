@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Curso.ComercioElectronico.Infraestructure
 {
-    public class ProductoRepository : EfRepository<Producto>, IProductoRepository
+    public class ProductoRepository : EfRepository<Producto, int>, IProductoRepository
     {
         //Persistencia
         public ProductoRepository(ComercioElectronicoDbContext context) : base(context)
@@ -28,17 +28,18 @@ namespace Curso.ComercioElectronico.Infraestructure
 
             return resultado;
         }
-        public async Task<List<Producto>> GetAllByIdAsync(List<int> indices){
-            List<Producto> lista = new List<Producto>();
-            foreach (var ind in indices)
-            {
-                var productoEntidad = await this.GetByIdAsync(ind);
-                if (productoEntidad != null)        
-                {
-                    lista.Add(productoEntidad);
-                }
-            }
-            return lista;
+        public async Task<ICollection<Producto>> GetListAsync(IList<int> listaIds, bool asNoTracking = true)
+        {
+            //GetAll, se ejecuta el linq???
+            var consulta = GetAll(asNoTracking);
+
+            consulta = consulta.Where(
+                    x => listaIds.Contains(x.Id)
+                );
+
+            //select * from productos where id in (1,3,4,5)
+            return await consulta.ToListAsync();
+
         }
     }
 }

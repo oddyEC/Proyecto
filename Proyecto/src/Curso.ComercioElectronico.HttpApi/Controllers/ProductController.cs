@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Curso.ComercioElectronico.Application;
+using Curso.ComercioElectronico.Application.Dtos;
 
 namespace Curso.ComercioElectronico.HttpApi.Controllers
 {
@@ -13,10 +14,21 @@ namespace Curso.ComercioElectronico.HttpApi.Controllers
             this.productoService = productoService;
         }
         [HttpGet]
-        public ListaPaginada<ProductoDto> GetAll()
+        public ListaPaginada<ProductoDto> GetAll(int limit = 10, int offset = 0)
         {
 
-            return productoService.GetAll();
+            return productoService.GetAll(limit, offset);
+
+        }
+        [HttpGet("list")]
+        public Task<ListaPaginada<ProductoDto>> GetListAsync([FromQuery] ProductoListInput input)
+        {
+            return productoService.GetListAsync(input);
+        }
+        [HttpGet("{id}")]
+        public async Task<ProductoDto> GetByIdAsync(int id)
+        {
+            return await productoService.GetByIdAsync(id);
         }
         [HttpGet("{name}")]
         public async Task<ProductoDto> GetByName(string name)

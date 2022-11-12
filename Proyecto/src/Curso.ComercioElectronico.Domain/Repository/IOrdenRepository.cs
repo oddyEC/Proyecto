@@ -1,7 +1,7 @@
 namespace Curso.ComercioElectronico.Domain.Repository
 {
-    public interface IOrdenRepository : IRepository<Orden>
+    public interface IOrdenRepository : IRepository<Orden,Guid>
     {
-         Task<Orden> GetByIdAsync(Guid id);
+        
     }
 }

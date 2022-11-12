@@ -1,17 +1,21 @@
-using System.IO.Compression;
-using System.ComponentModel.DataAnnotations;
 using Curso.ComercioElectronico.Domain;
+using Curso.ComercioElectronico.Application.Dtos;
 
 namespace Curso.ComercioElectronico.Application
 {
     public class ProductoAppService : IProductoAppService
     {
         private readonly IProductoRepository repository;
+        private readonly IMarcaRepository marcaRepository;
+        private readonly ITipoProductoRepository tipoProductoRepository;
 
-        public ProductoAppService(IProductoRepository repository)
+        public ProductoAppService(IProductoRepository repository, IMarcaRepository marcaRepository, ITipoProductoRepository tipoProductoRepository)
         {
             this.repository = repository;
+            this.marcaRepository = marcaRepository;
+            this.tipoProductoRepository = tipoProductoRepository;
         }
+
         public async Task<ProductoDto> CreateAsync(ProductoCrearActualizarDto productoDto)
         {
             //Reglas Validaciones... 
@@ -22,31 +26,23 @@ namespace Curso.ComercioElectronico.Application
             }
 
             //Mapeo Dto => Entidad
+            //Mapeo Dto => Entidad
             var producto = new Producto();
-            producto.Nombre = productoDto.Nombre;
-            producto.Precio = productoDto.Precio;
-            producto.Observaciones = productoDto.Observaciones;
             producto.Caducidad = productoDto.Caducidad;
             producto.MarcaId = productoDto.MarcaId;
+            producto.Nombre = productoDto.Nombre;
+            producto.Observaciones = productoDto.Observaciones;
+            producto.Precio = productoDto.Precio;
             producto.TipoProductoId = productoDto.TipoProductoId;
+
             //Persistencia objeto
             producto = await repository.AddAsync(producto);
-            //await unitOfWork.SaveChangesAsync();
-
-            //Mapeo Entidad => Dto
-            var productoCreado = new ProductoDto();
-            productoCreado.Nombre = producto.Nombre;
-            productoCreado.Precio = producto.Precio;
-            productoCreado.Observaciones = producto.Observaciones;
-            productoCreado.Caducidad = producto.Caducidad;
-            productoCreado.Id = producto.Id;
-            productoCreado.MarcaId = producto.MarcaId;
-            productoCreado.TipoProductoId = producto.TipoProductoId;
+            await repository.UnitOfWork.SaveChangesAsync();
 
 
             //TODO: Enviar un correo electronica... 
 
-            return productoCreado;
+            return await GetByIdAsync(producto.Id);
         }
 
         public async Task<bool> DeleteAsync(int productoId)
@@ -59,7 +55,7 @@ namespace Curso.ComercioElectronico.Application
             }
 
             repository.Delete(producto);
-            //await unitOfWork.SaveChangesAsync();
+            await repository.UnitOfWork.SaveChangesAsync();
 
             return true;
         }
@@ -105,29 +101,30 @@ namespace Curso.ComercioElectronico.Application
 
         public Task<ProductoDto> GetByIdAsync(int id)
         {
-            var consulta = repository.GetAll();
+            var consulta = repository.GetAllIncluding(x => x.TipoProducto, x => x.Marca);
             consulta = consulta.Where(x => x.Id == id);
-            var listaProductosDto = consulta
-                                           .Select(
-                                            x => new ProductoDto()
-                                            {
-                                                Id = x.Id,
-                                                Caducidad = x.Caducidad,
-                                                //Utilizar propiedad navegacion,
-                                                //para obtener información de una clase relacionada
-                                                Marca = x.Marca.Nombre,
-                                                MarcaId = x.MarcaId,
-                                                Nombre = x.Nombre,
-                                                Observaciones = x.Observaciones,
-                                                Precio = x.Precio,
-                                                //Utilizar propiedad navegacion,
-                                                // para obtener informacion de una clase relacionada
-                                                TipoProducto = x.TipoProducto.Nombre,
-                                                TipoProductoId = x.TipoProductoId
 
-                                            }
-                                           );
-            return Task.FromResult(listaProductosDto.SingleOrDefault());
+            var consultaProductoDto = consulta
+                                    .Select(
+                                        x => new ProductoDto()
+                                        {
+                                            Id = x.Id,
+                                            Caducidad = x.Caducidad,
+                                            //Utilizar propiedad navegacion,
+                                            // para obtener informacion de una clase relacionada
+                                            Marca = x.Marca.Nombre,
+                                            MarcaId = x.MarcaId,
+                                            Nombre = x.Nombre,
+                                            Observaciones = x.Observaciones,
+                                            Precio = x.Precio,
+                                            //Utilizar propiedad navegacion,
+                                            // para obtener informacion de una clase relacionada
+                                            TipoProducto = x.TipoProducto.Nombre,
+                                            TipoProductoId = x.TipoProductoId
+                                        }
+                                    );
+
+            return Task.FromResult(consultaProductoDto.SingleOrDefault());
         }
 
         public async Task<ProductoDto> GetByName(string nombre)
@@ -161,6 +158,67 @@ namespace Curso.ComercioElectronico.Application
                                 }
                                );
             return listaProductosDto.ToList().Single();
+        }
+
+        public async Task<ListaPaginada<ProductoDto>> GetListAsync(ProductoListInput input)
+        {
+            var consulta = repository.GetAllIncluding(x => x.Marca,
+                      x => x.TipoProducto);
+
+            //Aplicar filtros
+            if (input.TipoProductoId.HasValue)
+            {
+                consulta = consulta.Where(x => x.TipoProductoId == input.TipoProductoId);
+            }
+
+            if (input.MarcaId.HasValue)
+            {
+                consulta = consulta.Where(x => x.MarcaId == input.MarcaId);
+            }
+
+            if (!string.IsNullOrEmpty(input.ValorBuscar))
+            {
+
+                //consulta = consulta.Where(x => x.Nombre.Contains(input.ValorBuscar) ||
+                //    x.Codigo.StartsWith(input.ValorBuscar));
+                consulta = consulta.Where(x => x.Nombre.Contains(input.ValorBuscar));
+            }
+
+            //Ejecuatar linq. Total registros
+            var total = consulta.Count();
+
+            //Aplicar paginacion
+            consulta = consulta.Skip(input.Offset)
+                        .Take(input.Limit);
+
+            //Obtener el listado paginado. (Proyeccion)
+            var consulaListaProductosDto = consulta
+                                    .Select(
+                                        x => new ProductoDto()
+                                        {
+                                            Id = x.Id,
+                                            Caducidad = x.Caducidad,
+                                            //Utilizar propiedad navegacion,
+                                            // para obtener informacion de una clase relacionada
+                                            Marca = x.Marca.Nombre,
+                                            MarcaId = x.MarcaId,
+                                            Nombre = x.Nombre,
+                                            Observaciones = x.Observaciones,
+                                            Precio = x.Precio,
+                                            //Utilizar propiedad navegacion,
+                                            // para obtener informacion de una clase relacionada
+                                            TipoProducto = x.TipoProducto.Nombre,
+                                            TipoProductoId = x.TipoProductoId
+                                        }
+                                    );
+
+
+            var resultado = new ListaPaginada<ProductoDto>();
+            resultado.Total = total;
+            resultado.Lista = consulaListaProductosDto.ToList();
+
+            return resultado;
+
         }
 
         public async Task UpdateAsync(int id, ProductoCrearActualizarDto productoDto)

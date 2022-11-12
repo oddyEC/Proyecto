@@ -9,7 +9,7 @@ namespace Curso.ComercioElectronico.Application.Dtos
         public Guid Id { get; set; }
 
         [Required]
-        public int ClienteId { get; set; }
+        public Guid ClienteId { get; set; }
 
         public virtual string? Cliente { get; set; }
 

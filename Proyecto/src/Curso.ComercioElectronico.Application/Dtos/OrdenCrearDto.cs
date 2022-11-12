@@ -5,7 +5,7 @@ namespace Curso.ComercioElectronico.Application.Dtos
     public class OrdenCrearDto
     {
         [Required]
-        public int ClienteId { get; set; }
+        public Guid ClienteId { get; set; }
 
         [Required]
         public virtual ICollection<OrdenItemCrearActualizarDto> Items { get; set; }

@@ -1,6 +1,6 @@
 namespace Curso.ComercioElectronico.Domain.Repository
 {
-    public interface IClienteRepository : IRepository<Cliente>
+    public interface IClienteRepository : IRepository<Cliente,Guid>
     {
         
     }

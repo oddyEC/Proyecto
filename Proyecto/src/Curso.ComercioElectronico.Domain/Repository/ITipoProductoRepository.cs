@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Curso.ComercioElectronico.Domain
 {
-    public interface ITipoProductoRepository :  IRepository<TipoProducto>
+    public interface ITipoProductoRepository :  IRepository<TipoProducto,int>
     {
         Task<bool> ExisteNombre(string nombre);
 

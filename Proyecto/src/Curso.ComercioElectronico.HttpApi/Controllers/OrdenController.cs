@@ -33,18 +33,18 @@ namespace Curso.ComercioElectronico.HttpApi.Controllers
 
 
         [HttpPost]
-        public async Task<OrdenDto> CreateAsync(OrdenCrearDto marca)
+        public async Task<OrdenDto> CreateAsync(OrdenCrearDto orden)
         {
 
-            return await ordenAppService.CreateAsync(marca);
+            return await ordenAppService.CreateAsync(orden);
 
         }
 
         [HttpPut]
-        public async Task UpdateAsync(Guid id, OrdenActualizarDto marca)
+        public async Task UpdateAsync(Guid id, OrdenActualizarDto orden)
         {
 
-            await ordenAppService.UpdateAsync(id, marca);
+            await ordenAppService.UpdateAsync(id, orden);
 
         }
 

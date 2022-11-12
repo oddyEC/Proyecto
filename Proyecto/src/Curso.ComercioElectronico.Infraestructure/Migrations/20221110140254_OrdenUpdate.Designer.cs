@@ -3,6 +3,7 @@ using System;
 using Curso.ComercioElectronico.Infraestructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,18 +11,19 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Curso.ComercioElectronico.Infraestructure.Migrations
 {
     [DbContext(typeof(ComercioElectronicoDbContext))]
-    partial class ComercioElectronicoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221110140254_OrdenUpdate")]
+    partial class OrdenUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
 
             modelBuilder.Entity("Curso.ComercioElectronico.Domain.Cliente", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nombres")
                         .IsRequired()
@@ -55,8 +57,8 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ClienteId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Estado")
                         .HasColumnType("INTEGER");

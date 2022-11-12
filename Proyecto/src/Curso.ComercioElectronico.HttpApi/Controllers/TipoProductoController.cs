@@ -6,41 +6,43 @@ namespace Curso.ComercioElectronico.HttpApi.Controllers
     [Route("api/[controller]")]
     public class TipoProductoController : ControllerBase
     {
-        private readonly ITipoProductoService tipoProductoService;
-        public TipoProductoController(ITipoProductoService tipoProductoService)
+
+        private readonly ITipoProductoService tipoProductoAppService;
+
+        public TipoProductoController(ITipoProductoService tipoProductoAppService)
         {
-            this.tipoProductoService = tipoProductoService;
+            this.tipoProductoAppService = tipoProductoAppService;
         }
+
         [HttpGet]
-        public ICollection<TipoProductoDto> GetAll()
+        public ListaPaginada<TipoProductoDto> GetAll(int limit = 10, int offset = 0)
         {
 
-            return tipoProductoService.GetAll();
+            return tipoProductoAppService.GetAll(limit, offset);
         }
 
         [HttpPost]
-        public async Task<TipoProductoDto> CreateAsync(TipoProductoCrearActualizarDto tproducto)
+        public async Task<TipoProductoDto> CreateAsync(TipoProductoCrearActualizarDto marca)
         {
 
-            return await tipoProductoService.CreateAsync(tproducto);
+            return await tipoProductoAppService.CreateAsync(marca);
 
         }
 
         [HttpPut]
-        public async Task UpdateAsync(int id, TipoProductoCrearActualizarDto tproducto)
+        public async Task UpdateAsync(int id, TipoProductoCrearActualizarDto marca)
         {
 
-            await tipoProductoService.UpdateAsync(id, tproducto);
+            await tipoProductoAppService.UpdateAsync(id, marca);
 
         }
 
         [HttpDelete]
-        public async Task<bool> DeleteAsync(int tproductoId)
+        public async Task<bool> DeleteAsync(int marcaId)
         {
 
-            return await tipoProductoService.DeleteAsync(tproductoId);
+            return await tipoProductoAppService.DeleteAsync(marcaId);
 
         }
-
     }
 }

@@ -1,4 +1,7 @@
 using System.Reflection;
+using Curso.ComercioElectronico.Application.Dtos;
+using Curso.ComercioElectronico.Application.Validadores;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +20,13 @@ namespace Curso.ComercioElectronico.Application
 
             //Configurar la inyección de todos los profile que existen en un Assembly
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            //Configurar los validaciones
+            services.AddScoped<IValidator<MarcaCrearActualizarDto>,
+                            MarcaCrearActualizarDtoValidator>();
 
+
+            //Configurar todas las validaciones
+            //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;
 

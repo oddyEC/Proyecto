@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Curso.ComercioElectronico.Infraestructure
 {
-    public class TipoProductoRepository : EfRepository<TipoProducto>, ITipoProductoRepository
+    public class TipoProductoRepository : EfRepository<TipoProducto,int>, ITipoProductoRepository
     {
         public TipoProductoRepository(ComercioElectronicoDbContext context) : base(context)
         {
