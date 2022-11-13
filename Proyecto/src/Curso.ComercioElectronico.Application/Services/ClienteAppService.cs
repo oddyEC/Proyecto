@@ -11,6 +11,7 @@ namespace Curso.ComercioElectronico.Application;
 */
 public class ClienteAppService : IClienteAppService
 {
+
     private readonly IClienteRepository repository;
     private readonly IMapper mapper;
     private readonly ILogger<TipoProductoAppService> logger;
@@ -57,16 +58,31 @@ public class ClienteAppService : IClienteAppService
 
     }
 
-    public ICollection<ClienteDto> GetAll(string buscar, int limit = 10, int offset = 0)
+    public async Task<ListaPaginada<ClienteDto>> GetAll(string buscar, int limit = 10, int offset = 0)
     {
         var clienteList = repository.GetAll();
-        var clienteListDto = from c in clienteList
-                             select new ClienteDto()
-                             {
-                                 Id = c.Id,
-                                 Nombres = c.Nombres
-                             };
-        return clienteListDto.ToList();
+        clienteList = clienteList.Where(x => x.Nombres == buscar);
+        var existeNombreCliente = await repository.ExisteNombre(buscar);
+        if (!existeNombreCliente)
+        {
+            throw new ArgumentException($"No existe un cliente con el nombre de {buscar}");
+        }
+        var total = clienteList.Count();
+        var clienteListDto = clienteList.Skip(offset)
+                                        .Take(limit)
+                                        .Select(
+                                            x => new ClienteDto
+                                            {
+                                                Id = x.Id,
+                                                Nombres = x.Nombres
+                                            }
+                                        );
+        var resultado = new ListaPaginada<ClienteDto>();
+        resultado.Total = total;
+        resultado.Lista = clienteListDto.ToList();
+
+        return resultado;
+
     }
 
     public async Task UpdateAsync(Guid id, ClienteCrearActualizarDto clienteDto)

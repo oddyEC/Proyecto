@@ -15,7 +15,13 @@ namespace Curso.ComercioElectronico.HttpApi.Controllers
             this.clienteAppService = clienteAppService;
         }
 
+        [HttpGet]
+        public Task<ListaPaginada<ClienteDto>> GetAll(string buscar, int limit = 10, int offset = 0)
+        {
 
+            return clienteAppService.GetAll(buscar, limit, offset);
+
+        }
 
         [HttpPost]
         public async Task<ClienteDto> CreateAsync(ClienteCrearActualizarDto clienteCrearActualizarDto)
