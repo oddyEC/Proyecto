@@ -11,6 +11,7 @@ namespace Curso.ComercioElectronico.Domain
         [StringLength(DominioConstantes.NOMBRE_MAXIMO)]
         public string Nombres { get; set; }
 
+        
         //TODO: Agregar campos adicionales..
     }
 }

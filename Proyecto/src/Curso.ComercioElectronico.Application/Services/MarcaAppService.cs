@@ -12,7 +12,7 @@ public class MarcaAppService : IMarcaAppService
     private readonly IMapper mapper;
     private readonly ILogger<TipoProductoAppService> logger;
 
-    public MarcaAppService(ITipoProductoRepository tipoProductoRepository, IMapper mapper, ILogger<TipoProductoAppService> logger)
+    public MarcaAppService(IMarcaRepository marcaRepository, IMapper mapper, ILogger<TipoProductoAppService> logger)
     {
         this.marcaRepository = marcaRepository;
         this.mapper = mapper;
@@ -73,7 +73,7 @@ public class MarcaAppService : IMarcaAppService
 
         //Persistencia objeto
         await marcaRepository.UpdateAsync(marca);
-        //await unitOfWork.SaveChangesAsync();
+        await marcaRepository.UnitOfWork.SaveChangesAsync();
 
         return;
     }

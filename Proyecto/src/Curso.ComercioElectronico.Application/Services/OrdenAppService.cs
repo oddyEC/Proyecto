@@ -94,9 +94,20 @@ namespace Curso.ComercioElectronico.Application
                                                 Id = x.Id,
                                                 Cliente = x.Cliente.Nombres,
                                                 ClienteId = x.ClienteId,
+
                                                 Fecha = x.Fecha,
                                                 FechaAnulacion = x.FechaAnulacion,
                                                 Total = x.Total,
+                                                Items = x.Items.Select(item => new OrdenItemDto()
+                                                {
+                                                    Cantidad = item.Cantidad,
+                                                    Id = item.Id,
+                                                    Observaciones = item.Observaciones,
+                                                    OrdenId = item.OrdenId,
+                                                    Precio = item.Precio,
+                                                    ProductId = item.ProductId,
+                                                    Product = item.Product.Nombre
+                                                }).ToList(),
                                                 Observaciones = x.Observaciones,
                                                 Estado = x.Estado
 
@@ -150,7 +161,7 @@ namespace Curso.ComercioElectronico.Application
             {
                 throw new ArgumentException($"La orden con el id: {id}, no existe");
             }
-            
+
             orden.Observaciones = ordenDto.Observaciones;
 
             orden.Estado = ordenDto.Estado;

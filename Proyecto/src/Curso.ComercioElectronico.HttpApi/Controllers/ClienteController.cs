@@ -31,6 +31,17 @@ namespace Curso.ComercioElectronico.HttpApi.Controllers
 
         }
 
-        //TODO: Agregar las otras capacidades del api de clientes..
+        [HttpDelete]
+        public async Task<bool> DeleteAsync(Guid clienteId)
+        {
+            return await clienteAppService.DeleteAsync(clienteId);
+        }
+        [HttpPut]
+        public async Task UpdateAsync(Guid id, ClienteCrearActualizarDto cliente)
+        {
+
+            await clienteAppService.UpdateAsync(id, cliente);
+
+        }
     }
 }
