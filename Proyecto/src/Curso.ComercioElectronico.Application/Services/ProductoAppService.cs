@@ -1,5 +1,7 @@
 using Curso.ComercioElectronico.Domain;
 using Curso.ComercioElectronico.Application.Dtos;
+using AutoMapper;
+using Microsoft.Extensions.Logging;
 
 namespace Curso.ComercioElectronico.Application
 {
@@ -8,16 +10,21 @@ namespace Curso.ComercioElectronico.Application
         private readonly IProductoRepository repository;
         private readonly IMarcaRepository marcaRepository;
         private readonly ITipoProductoRepository tipoProductoRepository;
+        private readonly IMapper mapper;
+        private readonly ILogger<TipoProductoAppService> logger;
 
-        public ProductoAppService(IProductoRepository repository, IMarcaRepository marcaRepository, ITipoProductoRepository tipoProductoRepository)
+        public ProductoAppService(IProductoRepository repository, IMarcaRepository marcaRepository, ITipoProductoRepository tipoProductoRepository, IMapper mapper, ILogger<TipoProductoAppService> logger)
         {
             this.repository = repository;
             this.marcaRepository = marcaRepository;
             this.tipoProductoRepository = tipoProductoRepository;
+            this.mapper = mapper;
+            this.logger = logger;
         }
 
         public async Task<ProductoDto> CreateAsync(ProductoCrearActualizarDto productoDto)
         {
+            logger.LogInformation("Crear Producto");
             //Reglas Validaciones... 
             var existeNombreProducto = await repository.ExisteNombre(productoDto.Nombre);
             if (existeNombreProducto)
@@ -27,22 +34,21 @@ namespace Curso.ComercioElectronico.Application
 
             //Mapeo Dto => Entidad
             //Mapeo Dto => Entidad
-            var producto = new Producto();
-            producto.Caducidad = productoDto.Caducidad;
-            producto.MarcaId = productoDto.MarcaId;
-            producto.Nombre = productoDto.Nombre;
-            producto.Observaciones = productoDto.Observaciones;
-            producto.Precio = productoDto.Precio;
-            producto.TipoProductoId = productoDto.TipoProductoId;
+            var producto = mapper.Map<Producto>(productoDto);
 
-            //Persistencia objeto
             producto = await repository.AddAsync(producto);
             await repository.UnitOfWork.SaveChangesAsync();
+            // producto.Caducidad = productoDto.Caducidad;
+            // producto.MarcaId = productoDto.MarcaId;
+            // producto.Nombre = productoDto.Nombre;
+            // producto.Observaciones = productoDto.Observaciones;
+            // producto.Precio = productoDto.Precio;
+            // producto.TipoProductoId = productoDto.TipoProductoId;
 
-
-            //TODO: Enviar un correo electronica... 
-
-            return await GetByIdAsync(producto.Id);
+            //Persistencia objeto
+            var productoCreado = mapper.Map<ProductoDto>(producto);
+            await repository.UnitOfWork.SaveChangesAsync();
+            return productoCreado;
         }
 
         public async Task<bool> DeleteAsync(int productoId)

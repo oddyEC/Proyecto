@@ -41,7 +41,7 @@ namespace Curso.ComercioElectronico.Application
             //tipoProductoCreada.Id = tipoProducto.Id;
 
             var tipoProductoCreada = mapper.Map<TipoProductoDto>(tipoProducto);
-
+            await tipoProductoRepository.UnitOfWork.SaveChangesAsync();
 
             return tipoProductoCreada;
         }
@@ -54,6 +54,7 @@ namespace Curso.ComercioElectronico.Application
                 throw new ArgumentException($"El tipo de producto con el id: {tproductoId}, no existe");
             }
             tipoProductoRepository.Delete(tproducto);
+            await tipoProductoRepository.UnitOfWork.SaveChangesAsync();
             return true;
         }
 
@@ -71,12 +72,39 @@ namespace Curso.ComercioElectronico.Application
 
         public ListaPaginada<TipoProductoDto> GetAll(int limit = 10, int offset = 0)
         {
-            throw new NotImplementedException();
+            var consulta = tipoProductoRepository.GetAll();
+
+            var total = consulta.Count();
+            var listaTipoProductosDto = consulta.Skip(offset)
+                                                .Take(limit)
+                                                .Select(
+                                                x => new TipoProductoDto()
+                                                {
+                                                    Id = x.Id,
+                                                    Nombre = x.Nombre
+                                                }
+                                                );
+            var resultado = new ListaPaginada<TipoProductoDto>();
+            resultado.Total = total;
+            resultado.Lista = listaTipoProductosDto.ToList();
+
+            return resultado;
+
+
         }
 
         public Task<TipoProductoDto> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var consulta = tipoProductoRepository.GetAll();
+            consulta = consulta.Where(x => x.Id == id);
+            var consultaTipoProductoDto = consulta
+                                          .Select(
+                                            x => new TipoProductoDto(){
+                                                Id = x.Id,
+                                                Nombre = x.Nombre
+                                            }
+                                          );
+            return Task.FromResult(consultaTipoProductoDto.SingleOrDefault());
         }
 
         public async Task UpdateAsync(int id, TipoProductoCrearActualizarDto tproducto)
