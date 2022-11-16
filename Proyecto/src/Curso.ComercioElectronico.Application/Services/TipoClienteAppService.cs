@@ -31,7 +31,7 @@ namespace Curso.ComercioElectronico.Application.Services
             return tipoClienteCreado;
         }
 
-        public async Task<bool> DeleteAsync(int tclienteId)
+        public async Task<bool> DeleteAsync(string tclienteId)
         {
             var tproducto = await repository.GetByIdAsync(tclienteId);
             if (tproducto == null)
@@ -64,12 +64,12 @@ namespace Curso.ComercioElectronico.Application.Services
             return resultado;
         }
 
-        public Task<TipoClienteDto> GetByIdAsync(int id)
+        public Task<TipoClienteDto> GetByIdAsync(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task UpdateAsync(int id, TipoClienteCrearActualizarDto tcliente)
+        public async Task UpdateAsync(string id, TipoClienteCrearActualizarDto tcliente)
         {
             var tipoCliente = await repository.GetByIdAsync(id);
             if(tipoCliente == null){

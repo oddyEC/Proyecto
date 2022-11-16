@@ -1,6 +1,8 @@
 using AutoMapper;
 using Curso.ComercioElectronico.Application.Dtos;
 using Curso.ComercioElectronico.Domain;
+using Curso.ComercioElectronico.Domain.Entidades;
+
 namespace Curso.ComercioElectronico.Application.Mapeos
 {
     public class ConfiguracionesMapeoProfile :  Profile
@@ -20,6 +22,8 @@ namespace Curso.ComercioElectronico.Application.Mapeos
             CreateMap<Orden, OrdenDto>();
             CreateMap<ProductoCrearActualizarDto, Producto>();
             CreateMap<Producto, ProductoDto>();
+            CreateMap<CarroCrearActualizarDto, Carro>();
+            CreateMap<Carro, CarroDto>();
             //TODO: Agregar otros mapeos que se requieren...
 
         }

@@ -9,7 +9,7 @@ namespace Curso.ComercioElectronico.Domain.Entidades
     public class TipoCliente
     {
         [Required]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required]
         public string Usuario {get; set;}
         [Required]
