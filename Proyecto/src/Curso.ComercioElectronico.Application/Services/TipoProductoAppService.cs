@@ -6,12 +6,9 @@ namespace Curso.ComercioElectronico.Application
 {
     public class TipoProductoAppService : ITipoProductoService
     {
-
-
         private readonly ITipoProductoRepository tipoProductoRepository;
         private readonly IMapper mapper;
         private readonly ILogger<TipoProductoAppService> logger;
-
         public TipoProductoAppService(ITipoProductoRepository tipoProductoRepository,
             IMapper mapper,
             ILogger<TipoProductoAppService> logger)
@@ -23,26 +20,11 @@ namespace Curso.ComercioElectronico.Application
         public async Task<TipoProductoDto> CreateAsync(TipoProductoCrearActualizarDto tproducto)
         {
             logger.LogInformation("Crear Tipo Producto");
-
-            //Mapeo Dto => Entidad. (Manual)
-            //var tipoProducto = new TipoProducto();
-            //tipoProducto.Nombre = tipoProductoDto.Nombre;
-
-            //Automatico
             var tipoProducto = mapper.Map<TipoProducto>(tproducto);
-
-            //Persistencia objeto
             tipoProducto = await tipoProductoRepository.AddAsync(tipoProducto);
             await tipoProductoRepository.UnitOfWork.SaveChangesAsync();
-
-            //Mapeo Entidad => Dto
-            //var tipoProductoCreada = new TipoProductoDto();
-            //tipoProductoCreada.Nombre = tipoProducto.Nombre;
-            //tipoProductoCreada.Id = tipoProducto.Id;
-
             var tipoProductoCreada = mapper.Map<TipoProductoDto>(tipoProducto);
             await tipoProductoRepository.UnitOfWork.SaveChangesAsync();
-
             return tipoProductoCreada;
         }
 
@@ -73,7 +55,6 @@ namespace Curso.ComercioElectronico.Application
         public ListaPaginada<TipoProductoDto> GetAll(int limit = 10, int offset = 0)
         {
             var consulta = tipoProductoRepository.GetAll();
-
             var total = consulta.Count();
             var listaTipoProductosDto = consulta.Skip(offset)
                                                 .Take(limit)
@@ -87,19 +68,16 @@ namespace Curso.ComercioElectronico.Application
             var resultado = new ListaPaginada<TipoProductoDto>();
             resultado.Total = total;
             resultado.Lista = listaTipoProductosDto.ToList();
-
             return resultado;
-
-
         }
-
         public Task<TipoProductoDto> GetByIdAsync(int id)
         {
             var consulta = tipoProductoRepository.GetAll();
             consulta = consulta.Where(x => x.Id == id);
             var consultaTipoProductoDto = consulta
                                           .Select(
-                                            x => new TipoProductoDto(){
+                                            x => new TipoProductoDto()
+                                            {
                                                 Id = x.Id,
                                                 Nombre = x.Nombre
                                             }
@@ -122,7 +100,7 @@ namespace Curso.ComercioElectronico.Application
             //mapeo Dto => Entidad
             tipoProducto.Nombre = tproducto.Nombre;
             await tipoProductoRepository.UpdateAsync(tipoProducto);
-
+             await tipoProductoRepository.UnitOfWork.SaveChangesAsync();
             return;
         }
     }

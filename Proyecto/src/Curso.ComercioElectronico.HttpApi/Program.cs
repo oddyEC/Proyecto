@@ -15,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-//Configuraciones de Dependencias
+
 //Configuraciones de Dependencias
 //Configurar DBContext
 builder.Services.AddDbContext<ComercioElectronicoDbContext>(options =>

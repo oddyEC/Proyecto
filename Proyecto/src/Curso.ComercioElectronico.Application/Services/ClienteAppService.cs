@@ -6,9 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Curso.ComercioElectronico.Application;
 
-/**
-* TODO: Implementar todos los metodos del servicio de aplicacion de clientes
-*/
+
 public class ClienteAppService : IClienteAppService
 {
 
@@ -25,22 +23,10 @@ public class ClienteAppService : IClienteAppService
 
     public async Task<ClienteDto> CreateAsync(ClienteCrearActualizarDto clienteDto)
     {
-        //TODO: Aplicar validaciones
         logger.LogInformation("Crear Cliente");
-
-        //Mapeo Dto => Entidad
-        // var cliente = new Cliente();
-        // cliente.Id = Guid.NewGuid();
-        // cliente.Nombres = clienteDto.Nombres;
         var cliente = mapper.Map<Cliente>(clienteDto);
-        //Persistencia objeto
         cliente = await repository.AddAsync(cliente);
         await repository.UnitOfWork.SaveChangesAsync();
-
-        //Mapeo Entidad => Dto
-        // var clienteCreado = new ClienteDto();
-        // clienteCreado.Id = cliente.Id;
-        // clienteCreado.Nombres = cliente.Nombres;
         var clienteCreado = mapper.Map<ClienteDto>(cliente);
         return clienteCreado;
     }

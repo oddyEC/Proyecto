@@ -6,10 +6,10 @@ namespace Curso.ComercioElectronico.Application
 
         ListaPaginada<TipoProductoDto> GetAll(int limit = 10, int offset = 0);
 
-        Task<TipoProductoDto> CreateAsync(TipoProductoCrearActualizarDto marca);
+        Task<TipoProductoDto> CreateAsync(TipoProductoCrearActualizarDto tproducto);
 
-        Task UpdateAsync(int id, TipoProductoCrearActualizarDto marca);
+        Task UpdateAsync(int id, TipoProductoCrearActualizarDto tproducto);
 
-        Task<bool> DeleteAsync(int marcaId);
+        Task<bool> DeleteAsync(int tproductoId);
     }
 }

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Curso.ComercioElectronico.Application.Dtos;
 using Curso.ComercioElectronico.Domain;
 using Curso.ComercioElectronico.Domain.Repository;
@@ -10,45 +11,26 @@ namespace Curso.ComercioElectronico.Application
         private readonly IOrdenRepository ordenRepository;
         private readonly IProductoAppService productoAppService;
         private readonly ILogger<OrdenAppService> logger;
+        private readonly IMapper mapper;
 
-        public OrdenAppService(
-            IOrdenRepository ordenRepository,
-
-            //IProductoRepository productoRepository,
-            IProductoAppService productoAppService,
-            ILogger<OrdenAppService> logger)
+        public OrdenAppService(IOrdenRepository ordenRepository, IProductoAppService productoAppService, ILogger<OrdenAppService> logger, IMapper mapper)
         {
             this.ordenRepository = ordenRepository;
             this.productoAppService = productoAppService;
             this.logger = logger;
+            this.mapper = mapper;
         }
 
         public async Task<OrdenDto> CreateAsync(OrdenCrearDto ordenDto)
         {
             logger.LogInformation("Crear Orden");
-
-            //Crear una orden... 
-            //1. Validaciones...
-            //1.1. Stock.  
-            //1.2. Restricciones Cliente. (Posee deudas, 
-            //Disponibilidad del producto en la localizacion del cliente )
-            //Reglas Negocio.
-            //Si eres clientes nuevo, te aplico un descuento 10%
-            //Si eres clientes frecuente, te aplico un descuento 25%. (Ejercicio)
-            //-Siempre y cuando en los ultimos 3 meses tenga compras 
-            //Ciertos productos, se puede establecer descuento segun la cantidad de productos comprados
-            //2. Mapeos
             var orden = new Orden(Guid.NewGuid());
             orden.ClienteId = ordenDto.ClienteId;
             orden.Estado = OrdenEstado.Registrada;
             orden.Fecha = ordenDto.Fecha;
-
             var observaciones = string.Empty;
             foreach (var item in ordenDto.Items)
             {
-                //TODO: Depende de negocio, reglas
-                //1. Si no existe producto, no se agrega a la orden.
-                //2. Si no existe producto, agregar otro producto. (Requiere mayor logica) 
                 var productoDto = await productoAppService.GetByIdAsync(item.ProductId);
                 if (productoDto != null)
                 {

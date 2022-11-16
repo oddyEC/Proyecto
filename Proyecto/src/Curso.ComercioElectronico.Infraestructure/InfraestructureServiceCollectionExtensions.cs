@@ -17,7 +17,7 @@ namespace Curso.ComercioElectronico.Infraestructure
             services.AddTransient<ITipoProductoRepository, TipoProductoRepository>();
             services.AddTransient<IOrdenRepository, OrdenRepository>();
             services.AddTransient<IClienteRepository, ClienteRepository>();
-
+            
             //Configuraciones de Dependencias
             //Configurar DBContext
             services.AddDbContext<ComercioElectronicoDbContext>(options =>

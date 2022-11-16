@@ -1,12 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace Curso.ComercioElectronico.Domain.Entidades
+namespace Curso.ComercioElectronico.Domain.Entidades;
+
+
+public class Carro
 {
-    public class Carro
-    {
-        
-    }
+
+    [Required]
+    public int Id { get; set; }
+    [Required]
+    public Guid ClienteId { get; set; }
+
+    public virtual Cliente Cliente { get; set; }
+
+    public virtual ICollection<CarroItem> Items { get; set; } = new List<CarroItem>();
+    public decimal Subtotal{get; set;}
+
 }
+
