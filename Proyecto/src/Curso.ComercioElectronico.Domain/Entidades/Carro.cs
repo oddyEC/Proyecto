@@ -14,7 +14,14 @@ public class Carro
     public virtual Cliente Cliente { get; set; }
 
     public virtual ICollection<CarroItem> Items { get; set; } = new List<CarroItem>();
-    public decimal Subtotal{get; set;}
+    public decimal Subtotal { get; set; }
+
+    public void AgregarItem(CarroItem item)
+    {
+
+        item.Carro = this;
+        Items.Add(item);
+    }
 
 }
 

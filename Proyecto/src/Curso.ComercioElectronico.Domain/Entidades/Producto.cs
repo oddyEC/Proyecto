@@ -10,7 +10,7 @@ namespace Curso.ComercioElectronico.Domain
         public string? Nombre { get; set; }
         public decimal Precio { get; set; }
         public string? Observaciones { get; set; }
-        public DateTime? Caducidad {get; set;}
+        public DateTime? Caducidad { get; set; }
         [Required]
         public int MarcaId { get; set; }
         public virtual Marca? Marca { get; set; }

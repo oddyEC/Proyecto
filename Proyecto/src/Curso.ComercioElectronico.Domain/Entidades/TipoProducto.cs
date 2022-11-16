@@ -10,5 +10,10 @@ namespace Curso.ComercioElectronico.Domain
         [Required]
         [StringLength(DominioConstantes.NOMBRE_MAXIMO)]
         public string? Nombre { get; set; }
+
+        [Required]
+        public Guid ClienteId { get; set; }
+
+        public virtual Cliente Cliente { get; set; }
     }
 }

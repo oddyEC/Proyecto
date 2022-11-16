@@ -25,14 +25,15 @@ namespace Curso.ComercioElectronico.Domain.Entidades
 
         public string? Observaciones { get; set; }
 
-        public CarroItemEstado CarroItemEstado{get; set;}
+        public CarroItemEstado CarroItemEstado { get; set; }
+
     }
 }
 
-    public enum CarroItemEstado
-    {
+public enum CarroItemEstado
+{
 
-        Agotado = 0,
+    Agotado = 0,
 
-        Disponible = 1
-    }
+    Disponible = 1
+}

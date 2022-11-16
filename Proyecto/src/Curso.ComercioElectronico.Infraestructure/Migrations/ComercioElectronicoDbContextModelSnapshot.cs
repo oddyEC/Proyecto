@@ -23,14 +23,105 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Cedula")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaNacimiento")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nombres")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TipoClienteId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TipoClienteId");
+
                     b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("Curso.ComercioElectronico.Domain.Entidades.Carro", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.ToTable("Carros");
+                });
+
+            modelBuilder.Entity("Curso.ComercioElectronico.Domain.Entidades.CarroItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CarroId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CarroItemEstado")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Observaciones")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarroId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.ToTable("CarroItem");
+                });
+
+            modelBuilder.Entity("Curso.ComercioElectronico.Domain.Entidades.TipoCliente", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(8)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TipoClienteEstado")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Usuario")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TipoClientes");
                 });
 
             modelBuilder.Entity("Curso.ComercioElectronico.Domain.Marca", b =>
@@ -151,6 +242,9 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(80)
@@ -158,7 +252,50 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClienteId");
+
                     b.ToTable("TipoProductos");
+                });
+
+            modelBuilder.Entity("Curso.ComercioElectronico.Domain.Cliente", b =>
+                {
+                    b.HasOne("Curso.ComercioElectronico.Domain.Entidades.TipoCliente", "TipoCliente")
+                        .WithMany()
+                        .HasForeignKey("TipoClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TipoCliente");
+                });
+
+            modelBuilder.Entity("Curso.ComercioElectronico.Domain.Entidades.Carro", b =>
+                {
+                    b.HasOne("Curso.ComercioElectronico.Domain.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+                });
+
+            modelBuilder.Entity("Curso.ComercioElectronico.Domain.Entidades.CarroItem", b =>
+                {
+                    b.HasOne("Curso.ComercioElectronico.Domain.Entidades.Carro", "Carro")
+                        .WithMany("Items")
+                        .HasForeignKey("CarroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Curso.ComercioElectronico.Domain.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carro");
+
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("Curso.ComercioElectronico.Domain.Orden", b =>
@@ -208,6 +345,22 @@ namespace Curso.ComercioElectronico.Infraestructure.Migrations
                     b.Navigation("Marca");
 
                     b.Navigation("TipoProducto");
+                });
+
+            modelBuilder.Entity("Curso.ComercioElectronico.Domain.TipoProducto", b =>
+                {
+                    b.HasOne("Curso.ComercioElectronico.Domain.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+                });
+
+            modelBuilder.Entity("Curso.ComercioElectronico.Domain.Entidades.Carro", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Curso.ComercioElectronico.Domain.Orden", b =>
