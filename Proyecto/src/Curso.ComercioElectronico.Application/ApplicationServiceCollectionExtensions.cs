@@ -1,5 +1,7 @@
 using System.Reflection;
 using Curso.ComercioElectronico.Application.Dtos;
+using Curso.ComercioElectronico.Application.Interfaces;
+using Curso.ComercioElectronico.Application.Services;
 using Curso.ComercioElectronico.Application.Validadores;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +19,7 @@ namespace Curso.ComercioElectronico.Application
             services.AddTransient<IProductoAppService, ProductoAppService>();
             services.AddTransient<IOrdenAppService, OrdenAppService>();
             services.AddTransient<IClienteAppService, ClienteAppService>();
+            services.AddTransient<ITipoClienteAppService, TipoClienteAppService>();
 
             //Configurar la inyección de todos los profile que existen en un Assembly
             services.AddAutoMapper(Assembly.GetExecutingAssembly());

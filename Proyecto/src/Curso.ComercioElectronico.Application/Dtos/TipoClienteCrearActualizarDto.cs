@@ -5,8 +5,6 @@ namespace Curso.ComercioElectronico.Application.Dtos
     public class TipoClienteCrearActualizarDto
     {
         [Required]
-        public string Id { get; set; }
-        [Required]
         public string Usuario { get; set; }
         [Required]
         public string Password { get; set; }
